@@ -131,7 +131,8 @@ class AnsibleCli:
                     "--private-key", ssh_priv_key,
                     "-e", "'%s'" % extra_vars
                 ]
-            if cloud in ['aws-rds', 'aws-rds-aurora', 'azure-db']:
+            if cloud in ['aws-rds', 'aws-rds-aurora', 'azure-db',
+                         'azure-db-fs']:
                 command.append('--limit')
                 command.append('!primary')
             rc = exec_shell_live(command, cwd=self.dir)

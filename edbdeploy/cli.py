@@ -8,6 +8,7 @@ from .commands import (
     aws,
     azure,
     azure_db,
+    azure_db_fs,
     baremetal,
     rds as aws_rds,
     gcloud,
@@ -24,7 +25,8 @@ class CLIParser(argparse.ArgumentParser):
 
 def parse():
     parser = CLIParser(
-        description='EDB deployment script for aws, aws-rds, azure, azure-db and gcloud'
+        description='EDB deployment script for aws, aws-rds, azure, azure-db, '
+                    'azure-db-fs and gcloud'
     )
     parser.add_argument(
         '-v', '--version',
@@ -45,6 +47,8 @@ def parse():
     azure_parser = subparsers.add_parser('azure', help='Azure Cloud')
     azure_db_parser = subparsers.add_parser('azure-db',
                                             help='Azure Database Cloud')
+    azure_db_fs_parser = subparsers.add_parser('azure-db-fs',
+                                               help='Azure Database Cloud Flexible Server')
     gcloud_parser = subparsers.add_parser('gcloud', help='Google Cloud')
     baremetal_parser = subparsers.add_parser(
         'baremetal', help='Baremetal servers and VMs'
@@ -68,6 +72,10 @@ def parse():
         title='Azure Database sub-commands', dest='sub_command',
         metavar='<sub-command>'
     )
+    azure_db_fs_subparser = azure_db_fs_parser.add_subparsers(
+        title='Azure Database sub-commands', dest='sub_command',
+        metavar='<sub-command>'
+    )
     gcloud_subparser = gcloud_parser.add_subparsers(
         title='GCloud sub-commands', dest='sub_command',
         metavar='<sub-command>'
@@ -83,6 +91,7 @@ def parse():
     aws_rds_aurora.subcommands(aws_rds_aurora_subparser)
     azure.subcommands(azure_subparser)
     azure_db.subcommands(azure_db_subparser)
+    azure_db_fs.subcommands(azure_db_fs_subparser)
     gcloud.subcommands(gcloud_subparser)
     baremetal.subcommands(baremetal_subparser)
 
@@ -115,6 +124,8 @@ def parse():
             azure_parser.print_help()
         elif env.cloud == 'azure-db':
             azure_db_parser.print_help()
+        elif env.cloud == 'azure-db-fs':
+            azure_db_fs_parser.print_help()
         elif env.cloud == 'gcloud':
             gcloud_parser.print_help()
         elif env.cloud == 'baremetal':

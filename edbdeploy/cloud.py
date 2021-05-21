@@ -456,6 +456,10 @@ class AzureDBCli(AzureCli):
     pass
 
 
+class AzureDBFSCli(AzureCli):
+    pass
+
+
 class GCloudCli:
     def __init__(self, bin_path=None):
         # gcloud CLI supported versions interval
@@ -685,6 +689,8 @@ class CloudCli:
             self.cli = AzureCli(bin_path)
         elif self.cloud == 'azure-db':
             self.cli = AzureDBCli(bin_path)
+        elif self.cloud == 'azure-db-fs':
+            self.cli = AzureDBFSCli(bin_path)
         elif self.cloud == 'gcloud':
             self.cli = GCloudCli(bin_path)
         else:

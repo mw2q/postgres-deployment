@@ -122,6 +122,7 @@ $ edb-deployment <CLOUD_VENDOR> <SUB_COMMAND> [<PROJECT_NAME>]
   * `aws-rds-aurora`: Amazon Aurora
   * `azure`: Microsoft Azure Cloud
   * `azure-db`: Microsoft Azure Database
+  * `azure-db-fs`: Microsoft Azure Database Flexible Server
   * `gcloud`: Google Cloud
 
 ## Sub-commands

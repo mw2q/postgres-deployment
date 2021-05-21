@@ -81,6 +81,15 @@ class PgVersionOptionAzureDB:
     """)
 
 
+class PgVersionOptionAzureDBFS:
+    choices = ['11', '12', '13']
+    default = '13'
+    help = textwrap.dedent("""
+        Azure Database for PostgreSQL Flexible Server version. Allowed values
+        are: 11, 12, and 13.  Default: %(default)s
+    """)
+
+
 class EFMVersionOption:
     choices = ['3.10', '4.0', '4.1']
     default = '4.1'

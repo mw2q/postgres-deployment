@@ -10,7 +10,7 @@ import stat
 import time
 import yaml
 
-from .cloud import CloudCli, AWSCli, AWSRDSCli, AzureCli, AzureDBCli, GCloudCli
+from .cloud import CloudCli, AWSCli, AWSRDSCli, AzureCli, AzureDBCli, AzureDBFSCli, GCloudCli
 from .terraform import TerraformCli
 from .ansible import AnsibleCli
 from .action import ActionManager as AM
@@ -657,7 +657,7 @@ class Project:
 
     def _aws_build_terraform_vars(self, env):
         """
-        Build Terraform variable for AWS provisioning
+        Build Terraform variable for aws provisioning
         """
         ra = self.reference_architecture[env.reference_architecture]
         pg = env.cloud_spec['postgres_server']
@@ -712,7 +712,7 @@ class Project:
 
     def _gcloud_build_terraform_vars(self, env):
         """
-        Build Terraform variable for GCloud provisioning
+        Build Terraform variable for gcloud provisioning
         """
         ra = self.reference_architecture[env.reference_architecture]
         pg = env.cloud_spec['postgres_server']
@@ -761,7 +761,7 @@ class Project:
 
     def _azure_build_terraform_vars(self, env):
         """
-        Build Terraform variable for Azure provisioning
+        Build Terraform variable for azure provisioning
         """
         ra = self.reference_architecture[env.reference_architecture]
         pg = env.cloud_spec['postgres_server']
@@ -817,7 +817,7 @@ class Project:
 
     def _awsrds_build_terraform_vars(self, env):
         """
-        Build Terraform variable for AWS RDS provisioning
+        Build Terraform variable for aws rds provisioning
         """
         ra = self.reference_architecture[env.reference_architecture]
         pg = env.cloud_spec['postgres_server']
@@ -859,7 +859,7 @@ class Project:
 
     def _awsrdsaurora_build_terraform_vars(self, env):
         """
-        Build Terraform variable for AWS RDS Aurora provisioning
+        Build Terraform variable for aws rds aurora provisioning
         """
         ra = self.reference_architecture[env.reference_architecture]
         pg = env.cloud_spec['postgres_server']
@@ -910,6 +910,49 @@ class Project:
             'azure_publisher': os['publisher'],
             'azure_sku': os['sku'],
             'azuredb_sku': env.cloud_spec['postgres_server']['sku'],
+            'azure_region': env.azure_region,
+            'cluster_name': self.name,
+            'guc_effective_cache_size': guc[env.shirt]['effective_cache_size'],
+            'guc_max_wal_size': guc[env.shirt]['max_wal_size'],
+            'hammerdb': ra['hammerdb'],
+            'hammerdb_server': {
+                'count': 1 if ra['hammerdb_server'] else 0,
+                'instance_type': hammerdb['instance_type'],
+                'volume': hammerdb['volume'],
+            },
+            'pem_server': {
+                'count': 1 if ra['pem_server'] else 0,
+                'instance_type': pem['instance_type'],
+                'volume': pem['volume'],
+            },
+            'pg_version': env.postgres_version,
+            'postgres_server': {
+                'count': ra['pg_count'],
+                'instance_type': pg['instance_type'],
+                'volume': pg['volume'],
+            },
+            'ssh_pub_key': self.ssh_pub_key,
+            'ssh_priv_key': self.ssh_priv_key,
+            'ssh_user': os['ssh_user'],
+        }
+
+    def _azuredbfs_build_terraform_vars(self, env):
+        """
+        Build Terraform variable for Azure Database Flexible Server
+        provisioning
+        """
+        ra = self.reference_architecture[env.reference_architecture]
+        pg = env.cloud_spec['postgres_server']
+        os = env.cloud_spec['available_os'][env.operating_system]
+        pem = env.cloud_spec['pem_server']
+        hammerdb = env.cloud_spec['hammerdb_server']
+        guc = TPROCC_GUC
+
+        self.terraform_vars = {
+            'azure_offer': os['offer'],
+            'azure_publisher': os['publisher'],
+            'azure_sku': os['sku'],
+            'azuredb_sku': env.cloud_spec['postgres_server']['instance_type'],
             'azure_region': env.azure_region,
             'cluster_name': self.name,
             'guc_effective_cache_size': guc[env.shirt]['effective_cache_size'],
@@ -1020,6 +1063,9 @@ class Project:
         return self._dbaas_build_ansible_vars(env)
 
     def _azuredb_build_ansible_vars(self, env):
+        return self._dbaas_build_ansible_vars(env)
+
+    def _azuredbfs_build_ansible_vars(self, env):
         return self._dbaas_build_ansible_vars(env)
 
     def _baremetal_build_ansible_vars(self, env):
@@ -1252,7 +1298,7 @@ class Project:
 
         # Until this is resolved:
         # https://github.com/TPC-Council/HammerDB/issues/163
-        if self.cloud == 'azure-db':
+        if self.cloud == 'azure-db' or self.cloud == 'azure-db-fs':
             extra_vars.update(dict(azure_db_hackery=True))
 
         if pre_deploy_ansible:

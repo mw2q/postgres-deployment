@@ -1,6 +1,6 @@
 from . import SpecValidator
 
-AzureDBSpec = {
+AzureDBFSSpec = {
     'available_os': {
         'CentOS7': {
             'publisher': SpecValidator(type='string', default="OpenLogic"),
@@ -30,23 +30,43 @@ AzureDBSpec = {
     'postgres_server': {
         'sku': SpecValidator(
             type='choice',
-            choices=['B_Gen4_1', 'B_Gen4_2', 'B_Gen5_1', 'B_Gen5_2',
-                     'GP_Gen4_2', 'GP_Gen4_4', 'GP_Gen4_8', 'GP_Gen4_16',
-                     'GP_Gen4_32', 'GP_Gen5_2', 'GP_Gen5_4', 'GP_Gen5_8',
-                     'GP_Gen5_16', 'GP_Gen5_32', 'GP_Gen5_64', 'MO_Gen5_2',
-                     'MO_Gen5_4', 'MO_Gen5_8', 'MO_Gen5_16', 'MO_Gen5_32'
+            choices=[
+                'B_Standard_B1ms', 'B_Standard_B2s', 'B_Standard_D16s_v3',
+                'B_Standard_D2s_v3', 'B_Standard_D32s_v3',
+                'B_Standard_D48s_v3', 'B_Standard_D4s_v3',
+                'B_Standard_D64s_v3', 'B_Standard_D8s_v3',
+                'B_Standard_E16s_v3', 'B_Standard_E2s_v3',
+                'B_Standard_E32s_v3', 'B_Standard_E48s_v3',
+                'B_Standard_E4s_v3', 'B_Standard_E64s_v3', 'B_Standard_E8s_v3'
+                'GP_Standard_B1ms', 'GP_Standard_B2s', 'GP_Standard_D16s_v3',
+                'GP_Standard_D2s_v3', 'GP_Standard_D32s_v3',
+                'GP_Standard_D48s_v3', 'GP_Standard_D4s_v3',
+                'GP_Standard_D64s_v3', 'GP_Standard_D8s_v3',
+                'GP_Standard_E16s_v3', 'GP_Standard_E2s_v3',
+                'GP_Standard_E32s_v3', 'GP_Standard_E48s_v3',
+                'GP_Standard_E4s_v3', 'GP_Standard_E64s_v3',
+                'GP_Standard_E8s_v3' 'MO_Standard_B1ms', 'MO_Standard_B2s',
+                'MO_Standard_D16s_v3', 'MO_Standard_D2s_v3',
+                'MO_Standard_D32s_v3', 'MO_Standard_D48s_v3',
+                'MO_Standard_D4s_v3', 'MO_Standard_D64s_v3',
+                'MO_Standard_D8s_v3', 'MO_Standard_E16s_v3',
+                'MO_Standard_E2s_v3', 'MO_Standard_E32s_v3',
+                'MO_Standard_E48s_v3', 'MO_Standard_E4s_v3',
+                'MO_Standard_E64s_v3', 'MO_Standard_E8s_v3'
             ],
-            default='B_Gen5_2'
+            default='B_Standard_B1ms'
         ),
         'instance_type': SpecValidator(
             type='choice',
             choices=[
-                'Standard_A1_v2', 'Standard_A2_v2', 'Standard_A4_v2',
-                'Standard_A8_v2', 'Standard_A2m_v2', 'Standard_A4m_v2',
-                'Standard_A8m_v2', 'Standard_E4ds_v4', 'Standard_E8ds_v4',
-                'Standard_E16ds_v4', 'Standard_E32ds_v4'
+                'Standard_B1ms', 'Standard_B2s', 'Standard_D16s_v3',
+                'Standard_D2s_v3', 'Standard_D32s_v3', 'Standard_D48s_v3',
+                'Standard_D4s_v3', 'Standard_D64s_v3', 'Standard_D8s_v3',
+                'Standard_E16s_v3', 'Standard_E2s_v3', 'Standard_E32s_v3',
+                'Standard_E48s_v3', 'Standard_E4s_v3', 'Standard_E64s_v3',
+                'Standard_E8s_v3'
             ],
-            default='Standard_A4_v2'
+            default='Standard_B1ms'
         ),
         'volume': {
             'storage_account_type': SpecValidator(
@@ -59,7 +79,7 @@ AzureDBSpec = {
                 type='integer',
                 min=5120,
                 max=4194304,
-                default=100
+                default=5120
             )
         }
     },
