@@ -27,7 +27,7 @@ resource "azurerm_subnet" "all_subnet" {
   name                 = format("%s-%s-%s", var.cluster_name, "edb_subnet", count.index)
   resource_group_name  = var.resourcegroup_name
   virtual_network_name = var.vnet_name
-  address_prefix       = "10.0.${count.index}.0/24"
+  address_prefixes       = ["10.0.${count.index}.0/24"]
 }
 
 resource "azurerm_public_ip" "postgres_public_ip" {
