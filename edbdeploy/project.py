@@ -952,7 +952,7 @@ class Project:
             'azure_offer': os['offer'],
             'azure_publisher': os['publisher'],
             'azure_sku': os['sku'],
-            'azuredb_sku': env.cloud_spec['postgres_server']['instance_type'],
+            'azuredb_sku': pg['sku'],
             'azure_region': env.azure_region,
             'cluster_name': self.name,
             'guc_effective_cache_size': guc[env.shirt]['effective_cache_size'],
